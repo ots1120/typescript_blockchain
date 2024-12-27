@@ -23,7 +23,6 @@ class Block implements BlockShape {
     }
 }
 
-
 class Blockchain {
     private blocks:Block[]
     constructor(){

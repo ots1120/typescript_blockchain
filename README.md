@@ -46,4 +46,4 @@
 
 이 미니 프로젝트를 통해 TypeScript의 기본기를 다지고, 실제 프로젝트에서 활용할 수 있는 경험을 쌓을 수 있었다.
 
-*이 미니 프로젝트는 https://nomadcoders.co/typescript-for-beginners 강의를 참고하여 만들었습니다.*
+*이 미니 프로젝트 v1는 https://nomadcoders.co/typescript-for-beginners 강의를 참고하여 만들었습니다.*
