@@ -41,7 +41,7 @@ src/
 ├── models/ # 핵심 도메인 모델
 │ ├── Block.ts
 │ └── Blockchain.ts
-├── interfaces/ # 핵심 도메인 모델
+├── interfaces/ # 타입 정의를 위한 interface
 │ └── BlockShape.ts
 ├── errors/ # 에러 처리
 │ └── BlockchainError.ts
@@ -101,6 +101,7 @@ src/
 
 ### SOLID 원칙 적용
 - 단일 책임 원칙 (SRP) 각 클래스가 하나의 책임만 가질 수 있도록 분리함
+```
 // Block.ts - 블록 관련 책임만 담당
 export class Block { ... }
 
@@ -111,8 +112,10 @@ export class BlockchainError extends Error {
         this.name = 'BlockchainError';
     }
 }
+```
 
 - 개방/폐쇄 원칙 (OCP) 인터페이스 구현을 통해 기본 코드를 수정하지 않고 확장할 수 있도록 함
+```
 // BlockShape.ts - 인터페이스로 정의
 export interface BlockShape {
     hash: string;
@@ -127,6 +130,7 @@ export class Block implements BlockShape {
     // BlockShape의 형태를 유지하면서 
     // 내부 구현은 자유롭게 변경/확장 가능
 }
+```
 - 리스코프 치환 원칙 (LSP) - 상속 사용하지 않아서 아직 고려 안함
 - 인터페이스 분리 원칙 (ISP) 큰 인터페이스 대신 작은 단위로 분리 - 추후 고려
 ```
