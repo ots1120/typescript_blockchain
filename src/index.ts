@@ -1,6 +1,8 @@
 import { Blockchain } from "./model/Blockchain";
+import { HashCaculator } from "./model/HashCaculator";
 
-const blockchain = new Blockchain();
+const hashCalculator = new HashCaculator();
+const blockchain = new Blockchain(hashCalculator);
 
 blockchain.addData("First Data");
 blockchain.addData("Second Data");
@@ -22,7 +24,7 @@ try{
     const allBlocks = blockchain.getBlocks();
     console.log("전체 블록:", allBlocks);
     
-}catch(error){
+} catch(error){
     if(error instanceof Error){console.error("에러 발생:", error.message);}
     else{console.error("알 수 없는 에러 발생")}
 }

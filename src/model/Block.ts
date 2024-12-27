@@ -1,11 +1,12 @@
-import crypto from "crypto"
 import { BlockShape } from "../interfaces/BlockShape"
+import { IHashCaculator } from "../interfaces/IHashCaculator";
 
 export class Block implements BlockShape {
     public readonly hash:string;
     public readonly timestamp:number;
 
     constructor(
+        private readonly hashCaculator:IHashCaculator,
         public readonly prevHash:string,
         public readonly height:number,
         public readonly data:string
@@ -16,7 +17,7 @@ export class Block implements BlockShape {
 
     private calculateHash():string{
         const toHash = `${this.prevHash}${this.height}${this.data}${this.timestamp}`
-        return crypto.createHash("sha256").update(toHash).digest("hex")
+        return this.hashCaculator.calculateHash(toHash) // 분리된 해시 계산 로직
     }
 
     // 블록 유효성 검증

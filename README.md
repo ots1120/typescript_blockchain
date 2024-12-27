@@ -100,9 +100,7 @@ src/
 - v2: 객체지향적 구조 개선과 블록체인 기본 개념을 활용하여 기능 추가
 
 ### SOLID 원칙 적용
-1. 단일 책임 원칙 (SRP)
-각 클래스가 하나의 책임만 가질 수 있도록 분리함
-```
+- 단일 책임 원칙 (SRP) 각 클래스가 하나의 책임만 가질 수 있도록 분리함
 // Block.ts - 블록 관련 책임만 담당
 export class Block { ... }
 
@@ -113,10 +111,8 @@ export class BlockchainError extends Error {
         this.name = 'BlockchainError';
     }
 }
-```
-2. 개방/폐쇄 원칙 (OCP)
-인터페이스 구현을 통해 기본 코드를 수정하지 않고 확장할 수 있도록 함
-```
+
+- 개방/폐쇄 원칙 (OCP) 인터페이스 구현을 통해 기본 코드를 수정하지 않고 확장할 수 있도록 함
 // BlockShape.ts - 인터페이스로 정의
 export interface BlockShape {
     hash: string;
@@ -131,10 +127,8 @@ export class Block implements BlockShape {
     // BlockShape의 형태를 유지하면서 
     // 내부 구현은 자유롭게 변경/확장 가능
 }
-```
-3. 리스코프 치환 원칙 (LSP) - 상속 사용하지 않아서 아직 고려 안함
-4. 인터페이스 분리 원칙 (ISP)
-큰 인터페이스 대신 작은 단위로 분리 - 추후 고려
+- 리스코프 치환 원칙 (LSP) - 상속 사용하지 않아서 아직 고려 안함
+- 인터페이스 분리 원칙 (ISP) 큰 인터페이스 대신 작은 단위로 분리 - 추후 고려
 ```
 // 블록 데이터 관련 인터페이스
 interface BlockData {
@@ -154,4 +148,30 @@ interface BlockShape extends BlockData, BlockHash {
 }
 ```
 
-5. 의존관계 역전 원칙 (DIP)
+- 의존관계 역전 원칙 (DIP)
+1. 해시 계산 로직을 인터페이스로 정의하여 의존성 역전을 구현
+    - 기존
+        - Block 클래스가 직접 crypto 모듈에 의존하지 않도록 함
+        - 해시 계산 로직이 Block 클래스 내부에 하드코딩 되어있었기 때문에 다른 해시 계산 방식을 사용하려면 Block 클래스를 직접 수정해야 했음
+    - 개선
+        - Block 클래스는 이제 구체적인 구현(crypto 모듈)이 아닌 추상화(IHashCaculator 인터페이스)에 의존한다.
+        - HashCaculator 클래스는 IHashCaculator 인터페이스를 구현하여 해시 계산 로직을 제공한다.
+        - 다른 해시 알고리즘이 필요하면 새로운 Calculator 클래스만 만들면 된다.
+```
+IHashCalculator.ts
+export interface IHashCalculator {
+  calculate(data: string): string;
+}
+
+---
+
+Block.ts
+import crypto from "crypto";
+import { IHashCalculator } from "../interfaces/IHashCalculator";
+
+export class HashCalculator implements IHashCalculator {
+  calculate(data: string): string {
+    return crypto.createHash("sha256").update(data).digest("hex");
+  }
+}
+```

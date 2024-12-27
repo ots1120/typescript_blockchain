@@ -1,12 +1,14 @@
 import { Block } from "./Block";
 import { BlockchainError } from "../errors/BlockchainError";
+import { IHashCaculator } from "../interfaces/IHashCaculator";
 
 export class Blockchain {
     private readonly blocks:Block[] = [];
     private readonly pendingData: string[] = []; // 메모리 풀과 유사한 개념: 대기 중인 데이터를 저장하는 배열
     
-    constructor(){
-        const genesisBlock = new Block("0",0,"Genesis Block");
+    constructor(private readonly hashCaculator:IHashCaculator){
+        const genesisBlock = new Block(
+            this.hashCaculator,"0",0,"Genesis Block");
         this.blocks.push(genesisBlock);
     }
 
@@ -21,6 +23,7 @@ export class Blockchain {
         // pendingData에서 가장 오래된 데이터를 가져와 새 블록을 생성(첫번째 요소 제거 및 반환)
         const data = this.pendingData.shift() || "";
         const newBlock = new Block(
+            this.hashCaculator,
             this.getLastBlock().hash,
             this.blocks.length,
             data
